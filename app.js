@@ -10,7 +10,6 @@ app.use("/api/user", require("./src/routes/user.routes"));
 
 
 app.listen(PORT, () =>{
-    console.log(`Rodando na porta ${PORT}`)
+    console.log(`Rodando na porta ${PORT}`);
     require("./src/configs/discord.config");
 });
-

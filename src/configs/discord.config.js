@@ -1,3 +1,4 @@
+const { sendImageToChannel } = require('../controllers/quote.controller');
 // Require the necessary discord.js classes
 const { Client, Events, GatewayIntentBits, Collection } = require("discord.js");
 // importação dos comandos
@@ -26,7 +27,7 @@ for (const file of commandFiles) {
 client.once(Events.ClientReady, (c) => {
   console.log(`Ready! Logged in as ${c.user.tag}`);
   //
-  sendImageToChannel();
+  sendImageToChannel(client);
 });
 
 client.login(process.env.TOKEN);
@@ -46,32 +47,3 @@ client.on(Events.InteractionCreate, async interaction => {
     await interaction.reply("Houve um erro ao executar esse comando!");
   }
 });
-
-// Função para enviar a imagem para o canal
-function sendImageToChannel() {
-  // Lógica para processar a imagem e obter o caminho do arquivo
-  const imagePath = path.join(__dirname, "../../public/img/teste.jpg");
-
-  // ID do canal no Discord para onde você deseja enviar a imagem
-  const channelId = '1115111545526030336';
-
-  // Busca o canal no Discord
-  const channel = client.channels.cache.get(channelId);
-
-  if (!channel) {
-    console.log('Canal não encontrado.');
-    return;
-  }
-
-  // Envia a imagem para o canal
-  channel.send({
-    files: [{
-      attachment: imagePath,
-      name: 'rs.png'
-    }]
-  })
-    .then(() => console.log('Imagem enviada com sucesso.'))
-    .catch(error => {
-      console.error('Erro ao enviar a imagem:', error);
-    });
-}
