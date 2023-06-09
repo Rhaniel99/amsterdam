@@ -1,4 +1,4 @@
-const database = require("../config/db.config");
+const database = require("../configs/db.config");
 const Sequelize = require("sequelize");
 
 const Quote = database.define("quotes", {
@@ -13,11 +13,11 @@ const Quote = database.define("quotes", {
     allowNull: false,
   },
   quote:{
-    type: Sequelize.DATEONLY,
+    type: Sequelize.STRING,
     allowNull:false,
   },
   date_release: {
-    type: Sequelize.STRING,
+    type: Sequelize.DATEONLY,
     allowNull: false,
   },
   artist_rep: {
@@ -27,12 +27,12 @@ const Quote = database.define("quotes", {
 });
 
 // Sincronizar o modelo com o banco de dados
-// Client.sync()
+// Quote.sync()
 //   .then(() => {
-//     console.log('Tabela "Client" criada com sucesso.');
+//     console.log('Tabela criada com sucesso.');
 //   })
 //   .catch((error) => {
-//     console.error('Erro ao criar tabela "Client":', error);
+//     console.error('Erro ao criar tabela:', error);
 //   });
 
 module.exports = Quote;

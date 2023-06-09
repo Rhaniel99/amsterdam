@@ -1,4 +1,3 @@
-const { sendImageToChannel } = require('../controllers/quote.controller');
 // Require the necessary discord.js classes
 const { Client, Events, GatewayIntentBits, Collection } = require("discord.js");
 // importação dos comandos
@@ -26,15 +25,13 @@ for (const file of commandFiles) {
 // Login Bot
 client.once(Events.ClientReady, (c) => {
   console.log(`Ready! Logged in as ${c.user.tag}`);
-  //
-  sendImageToChannel(client);
 });
 
 client.login(process.env.TOKEN);
 
 // Listener de interações com o bot
-client.on(Events.InteractionCreate, async interaction => {
-  if (!interaction.isChatInputCommand()) return
+client.on(Events.InteractionCreate, async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
   const command = interaction.client.commands.get(interaction.commandName);
   if (!command) {
     console.error("Comando não encontrado!");
@@ -47,3 +44,5 @@ client.on(Events.InteractionCreate, async interaction => {
     await interaction.reply("Houve um erro ao executar esse comando!");
   }
 });
+
+module.exports = client;
