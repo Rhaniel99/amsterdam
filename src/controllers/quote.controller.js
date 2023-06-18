@@ -16,7 +16,6 @@ const register = async (req, res) => {
     }
     const { artist_work, quote, date_release } = req.body;
     const artist_rep = req.file;
-
     const quotes = new Quote({artist_work, quote, date_release});
     sendImageToChannel(client, artist_rep, quotes);
     await quotes.save();
