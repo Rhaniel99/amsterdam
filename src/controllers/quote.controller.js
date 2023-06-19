@@ -14,98 +14,67 @@ const register = async (req, res) => {
         msg: "Erro ao registrar",
       });
     }
+
     const { artist_work, quote, date_release } = req.body;
     const artist_rep = req.file;
-    const quotes = new Quote({artist_work, quote, date_release});
-    sendImageToChannel(client, artist_rep, quotes);
-    await quotes.save();
-    return res.json({
-      success: true,
-      msg: "Registrado com sucesso.",
-    });
+    const quotes = new Quote({ artist_work, quote, date_release });
+
+    try {
+      await sendImageToChannel(client, artist_rep, quotes);
+      return res.json({
+        success: true,
+        msg: "Registrado com sucesso.",
+      });
+    } catch (error) {
+      console.error("Erro ao enviar a imagem para o Discord:", error);
+      return res.json({
+        success: false,
+        msg: "Erro ao registrar",
+      });
+    }
   });
 };
-
 function sendImageToChannel(client, artist_rep, quotes) {
-  const channelId = process.env.CHANNEL_ID;
-  const channel = client.channels.cache.get(channelId);
+  return new Promise((resolve, reject) => {
+    const channelId = process.env.CHANNEL_ID;
+    const channel = client.channels.cache.get(channelId);
 
-  if (!channel) {
-    console.log("Canal não encontrado.");
-    return;
-  }
-  channel
-    .send({
-      //   content: `Artista: ${artist_work}\nCitação: ${quote}\nData de Lançamento: ${date_release}`,
-      files: [
-        {
-          attachment: artist_rep.buffer, // Use o buffer da imagem fornecido pelo Multer
-          name: artist_rep.originalname,
-        },
-      ],
-    })
-    .then((message) => {
-      // Extrair a URL da imagem enviada
-      const attachment = message.attachments.first();
-      const imageUrl = attachment.url;
+    if (!channel) {
+      console.log("Canal não encontrado.");
+      reject(new Error("Canal não encontrado."));
+      return;
+    }
 
-      console.log("Imagem enviada com sucesso.");
-      quotes.artist_rep = imageUrl;
-      quotes.save();
-    })
-    .catch((error) => {
-      console.error("Erro ao enviar a imagem:", error);
-    });
+    const fileBuffer = artist_rep.buffer; // Obter o buffer do arquivo
+
+    channel
+      .send({
+        files: [
+          {
+            attachment: fileBuffer,
+            name: artist_rep.originalname,
+          },
+        ],
+      })
+      .then((message) => {
+        const attachment = message.attachments.first();
+        const imageUrl = attachment.url;
+
+        console.log("Imagem enviada com sucesso.");
+        quotes.artist_rep = imageUrl;
+        return quotes.save();
+      })
+      .then(() => {
+        console.log("Registrado com sucesso.");
+        resolve();
+      })
+      .catch((error) => {
+        console.error("Erro ao enviar a imagem:", error);
+        reject(error);
+      });
+  });
 }
-
-// function sendImageToChannel(client) {
-//   const imagePath = path.join(__dirname, "../../public/img/teste.jpg");
-//   const channelId = "1115111545526030336";
-//   const channel = client.channels.cache.get(channelId);
-
-//   if (!channel) {
-//     console.log("Canal não encontrado.");
-//     return;
-//   }
-
-//   channel
-//     .send({
-//       files: [
-//         {
-//           attachment: imagePath,
-//           name: "rs.png",
-//         },
-//       ],
-//     })
-//     .then((message) => {
-//       // Extrair a URL da imagem enviada
-//       const attachment = message.attachments.first();
-//       const imageUrl = attachment.url;
-
-//       console.log("Imagem enviada com sucesso.");
-//       console.log("URL da imagem:", imageUrl);
-
-//       // Aqui você pode usar a URL da imagem como desejar, por exemplo, exibir no console ou em uma página HTML
-
-//       // Exemplo de exibição em uma página HTML
-//       const html = `
-//           <html>
-//           <head>
-//             <title>Exibição da Imagem</title>
-//           </head>
-//           <body>
-//             <img src="${imageUrl}" alt="Imagem" width="500">
-//           </body>
-//           </html>
-//         `;
-//       // Você pode enviar o HTML para o cliente ou salvá-lo em um arquivo HTML para exibição posterior
-//     })
-//     .catch((error) => {
-//       console.error("Erro ao enviar a imagem:", error);
-//     });
-// }
 
 module.exports = {
   register,
-  // sendImageToChannel,
 };

@@ -1,24 +1,64 @@
 @import url("https://fonts.googleapis.com/css?family=Fjalla+One&display=swap");
+
 * {
   margin: 0;
   padding: 0;
 }
 
-
 body {
-    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/38816/image-from-rawpixel-id-2210775-jpeg.jpg") center center no-repeat;
-    background-size: cover;
-    width: 100vw;
-    height: 100vh;
-    display: grid;
-    align-items: center;
-    justify-items: center;
-  }
+  background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/38816/image-from-rawpixel-id-2210775-jpeg.jpg") center center no-repeat;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  
+.container {
+  display: flex;
+  justify-content: space-between;
+  max-width: 800px;
+}
+
 .contact-us {
-    background: #f8f4e5;
-    padding: 50px 100px;
-    border: 2px solid black;
-    box-shadow: 15px 15px 1px #ffa580, 15px 15px 1px 2px black;
-  }
+  background: #f8f4e5;
+  padding: 20px;
+  border: 2px solid black;
+  box-shadow: 15px 15px 1px #ffa580, 15px 15px 1px 2px black;
+  overflow-wrap: break-word;
+  flex-basis: calc(50% - 10px); /* 50% width with 10px space in between */
+  
+}
+
+.contact-us:not(:last-child) {
+  margin-right: 80px; /* Space between the boxes */
+}
+
+.contact-us img {
+  max-width: 50%;
+  height: auto;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+button {
+  line-height: 28pt;
+  padding: 0 20px;
+  background: #ffa580;
+  letter-spacing: 2px;
+  transition: 0.2s all ease-in-out;
+  outline: none;
+  border: 1px solid black;
+  box-shadow: 3px 3px 1px 1px #95a4ff, 3px 3px 1px 2px black;
+}
+
+button:hover {
+  background: black;
+  color: white;
+  border: 1px solid black;
+}

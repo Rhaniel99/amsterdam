@@ -9,11 +9,19 @@
   <body>
     <header></header>
     <main>
-      <div class="contact-us">
-        <h2>Obra</h1>
-        <h2>Citação</h1>
-        <h2>Data</h1>
-        <h2>Imagem</h1>
+      <div class="container">
+        <% quotes.forEach((quote) => { %>
+        <div class="contact-us">
+          <img src="<%= quote.artist_rep %>" alt="" />
+          <h2><%= quote.artist_work %></h2>
+          <h2>"<%= quote.quote %>"</h2>
+          <h2><%= quote.date_release %></h2>
+          <div class="button-container">
+            <button type="button">Editar</button>
+            <button type="button">Deletar</button>
+          </div>
+        </div>
+        <% }); %>
       </div>
     </main>
     <footer></footer>

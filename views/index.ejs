@@ -8,14 +8,66 @@
   </head>
   <body>
     <div class="contact-us">
-      <form>
-        <input placeholder="Obra" required="" type="text" />
-        <textarea cols="30" rows="2" placeholder="Citação"></textarea>
-        <input placeholder="Data de Lançamento" type="date" />
-        <input name="customerEmail" placeholder="Envio da imagem" type="file" />
+      <form id="form" enctype="multipart/form-data">
+        <input placeholder="Obra" class="inputGroup" required="" type="text" />
+        <textarea
+          cols="30"
+          rows="2"
+          class="inputGroup"
+          placeholder="Citação"
+        ></textarea>
+        <input
+          placeholder="Data de Lançamento"
+          type="date"
+          class="inputGroup"
+        />
+        <input
+          name="artist_rep"
+          placeholder="Envio da imagem"
+          class="inputGroup"
+          type="file"
+        />
 
-        <button type="button">Cadastrar</button>
+        <button type="submit" id="formBtnCad">Cadastrar</button>
       </form>
     </div>
+
+    <script>
+      const form = document.getElementById("form");
+      const inputs = document.getElementsByClassName("inputGroup");
+      const btnForm = document.getElementById("formBtnCad");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append("artist_work", inputs[0].value);
+        formData.append("quote", inputs[1].value);
+        formData.append("date_release", inputs[2].value);
+        formData.append("artist_rep", inputs[3].files[0]);
+
+        console.log(formData);
+
+        await sendData(formData);
+      });
+
+      const sendData = async (formData) => {
+        try {
+          btnForm.setAttribute("disabled", true);
+          const response = await fetch(
+            `http://localhost:4000/api/user/send-img`,
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
+          const data = await response.json();
+          console.log(data);
+          btnForm.removeAttribute("disabled");
+        } catch (error) {
+          console.log(error);
+          btnForm.removeAttribute("disabled");
+        }
+      };
+    </script>
   </body>
 </html>
