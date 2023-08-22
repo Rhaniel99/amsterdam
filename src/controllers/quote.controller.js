@@ -4,6 +4,7 @@ const client = require("../configs/discord.config");
 const path = require("node:path");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single("artist_rep");
+const sharp = require('sharp')
 
 const register = async (req, res) => {
   upload(req, res, async function (err) {
@@ -34,6 +35,12 @@ const register = async (req, res) => {
     }
   });
 };
+
+const update = async (req, res) =>{
+
+}
+
+
 function sendImageToChannel(client, artist_rep, quotes) {
   return new Promise((resolve, reject) => {
     const channelId = process.env.CHANNEL_ID;
@@ -47,29 +54,55 @@ function sendImageToChannel(client, artist_rep, quotes) {
 
     const fileBuffer = artist_rep.buffer; // Obter o buffer do arquivo
 
-    channel
-      .send({
-        files: [
-          {
-            attachment: fileBuffer,
-            name: artist_rep.originalname,
-          },
-        ],
-      })
-      .then((message) => {
-        const attachment = message.attachments.first();
-        const imageUrl = attachment.url;
+    // Verifique as dimensões da imagem
+    sharp(fileBuffer)
+      .metadata()
+      .then((metadata) => {
+        const width = metadata.width;
+        const height = metadata.height;
 
-        console.log("Imagem enviada com sucesso.");
-        quotes.artist_rep = imageUrl;
-        return quotes.save();
+        if (width === 564 && height === 564) {
+          // A imagem já possui as dimensões desejadas, não é necessário redimensionar
+          console.log("A imagem já possui as dimensões desejadas.");
+          return fileBuffer;
+        } else {
+          // Redimensione a imagem para 564x564
+          console.log("Redimensionando a imagem...");
+          return sharp(fileBuffer)
+            .resize(564, 564)
+            .toBuffer();
+        }
       })
-      .then(() => {
-        console.log("Registrado com sucesso.");
-        resolve();
+      .then((imageBuffer) => {
+        // Envie a imagem para o canal Discord
+        channel
+          .send({
+            files: [
+              {
+                attachment: imageBuffer,
+                name: artist_rep.originalname,
+              },
+            ],
+          })
+          .then((message) => {
+            const attachment = message.attachments.first();
+            const imageUrl = attachment.url;
+
+            console.log("Imagem enviada com sucesso.");
+            quotes.artist_rep = imageUrl;
+            return quotes.save();
+          })
+          .then(() => {
+            console.log("Registrado com sucesso.");
+            resolve();
+          })
+          .catch((error) => {
+            console.error("Erro ao enviar a imagem:", error);
+            reject(error);
+          });
       })
       .catch((error) => {
-        console.error("Erro ao enviar a imagem:", error);
+        console.error("Erro ao verificar as dimensões da imagem:", error);
         reject(error);
       });
   });
@@ -77,4 +110,5 @@ function sendImageToChannel(client, artist_rep, quotes) {
 
 module.exports = {
   register,
+  update
 };

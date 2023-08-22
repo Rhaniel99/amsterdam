@@ -4,24 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Visualizador</title>
-    <link rel="stylesheet" href="/css/style-quotes.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
     <header></header>
     <main>
       <div class="container">
-        <% quotes.forEach((quote) => { %>
-        <div class="contact-us">
-          <img src="<%= quote.artist_rep %>" alt="" />
-          <h2><%= quote.artist_work %></h2>
-          <h2>"<%= quote.quote %>"</h2>
-          <h2><%= quote.date_release %></h2>
-          <div class="button-container">
-            <button type="button">Editar</button>
-            <button type="button">Deletar</button>
-          </div>
+        <div class="card-container">
+          <% quotes.forEach((quote) => { %>
+            <div class="card-item">
+              <div class="picture">
+                <img src="<%= quote.artist_rep %>" alt="" class="img-fluid" />
+              </div>
+              <h2><%= quote.artist_work %></h2>
+              <h2 class="quote-text">"<%= quote.quote %>"</h2>
+              <h2><%= quote.date_release %></h2>
+              <div class="button-container">
+                <button type="button" class="card-button">Editar</button>
+                <button type="button" class="card-button">Deletar</button>
+              </div>
+            </div>
+          <% }); %>
         </div>
-        <% }); %>
       </div>
     </main>
     <footer></footer>

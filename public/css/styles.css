@@ -1,0 +1,104 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/38816/image-from-rawpixel-id-2210775-jpeg.jpg") center center no-repeat;
+    background-size: cover;
+
+  }
+  
+  .container {
+    margin: 120px; /* Adicione margens ao redor da grade */
+  }
+  
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 40px;
+    text-align: center;
+  }
+  
+  .card-item {
+    width: 40vh;
+    background: #f8f4e5;
+    padding: 20px;
+    border: 2px solid black;
+    box-shadow: 15px 15px 1px #ffa580, 15px 15px 1px 2px black;
+
+    /* Adicione as seguintes propriedades para usar flexbox */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  }
+  .button-container {
+    /* Mova a .button-container para o final do card usando margem superior automática */
+    margin-top: auto;
+  }
+
+  .card-button {
+    line-height: 28pt;
+    padding: 0 20px;
+    background: #ffa580;
+    letter-spacing: 2px;
+    transition: 0.2s all ease-in-out;
+    outline: none;
+    border: 1px solid black;
+    box-shadow: 3px 3px 1px 1px #95a4ff, 3px 3px 1px 2px black;
+  }
+  
+  .card-button:hover {
+    background: black;
+    color: white;
+    border: 1px solid black;
+  }
+  
+  .quote-text {
+    max-width: 400px; /* Ajuste este valor conforme necessário */
+    margin: 0 auto; /* Centraliza horizontalmente */
+    overflow: hidden; /* Evita que o texto ultrapasse a largura */
+    text-overflow: ellipsis; /* Adiciona reticências (...) se o texto for cortado */
+  }
+
+  .picture {
+    display: inline-block;
+    height: 130px;
+    width: 130px;
+    margin-bottom: 50px;
+    z-index: 1;
+    position: relative;
+  }
+
+  .picture img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    transform: scale(1);
+    transition: all 0.9s ease 0s;
+  }
+
+  .picture:hover img {
+    box-shadow: 0 0 0 14px #f7f5ec;
+    transform: scale(0.7);
+  }
+
+  .picture::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #ffa580;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+  
+  
+  @media screen and (max-width: 768px) {
+    .card-container {
+      grid-template-columns: 1fr;
+    }
+  }
+  
