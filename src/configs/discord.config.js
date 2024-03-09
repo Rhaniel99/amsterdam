@@ -21,7 +21,6 @@ for (const file of commandFiles) {
     console.log(`Esse comando em ${filePath}`);
   }
 }
-
 // Login Bot
 client.once(Events.ClientReady, (c) => {
   console.log(`Ready! Logged in as ${c.user.tag}`);
@@ -44,5 +43,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
     await interaction.reply("Houve um erro ao executar esse comando!");
   }
 });
+
 
 module.exports = client;

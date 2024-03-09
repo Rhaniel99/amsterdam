@@ -1,17 +1,15 @@
 version: '3'
 
 services:
-  app:
-    build: .
+  amsterdam:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+
+    volumes:
+      - ./src/configs/amsterdam.sqlite:/usr/src/data/amsterdam.sqlite
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules # Remove this if you have pure JS dependencies
+
     ports:
       - "3000:3000"
-    depends_on:
-      - db
-  db:
-    image: postgres:latest
-    ports:
-      - "5433:5432"  # Porta da App/ Porta do Host
-    env_file:
-      - .env
-    volumes:
-      - ./src/configs/init.sql:/docker-entrypoint-initdb.d/init.sql
