@@ -26,13 +26,4 @@ const Quote = database.define("quotes", {
   },
 });
 
-// Sincronizar o modelo com o banco de dados
-// Quote.sync()
-//   .then(() => {
-//     console.log('Tabela criada com sucesso.');
-//   })
-//   .catch((error) => {
-//     console.error('Erro ao criar tabela:', error);
-//   });
-
 module.exports = Quote;
